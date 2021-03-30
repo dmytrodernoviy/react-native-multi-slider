@@ -468,7 +468,26 @@ export default class MultiSlider extends React.Component {
               ]}
             />
           )}
- 
+          <View style={[
+            styles.breakPointsContainer, 
+            { 
+              width: sliderLength + breakPointSize, 
+              top: - breakPointSize / 2, 
+              left: - breakPointSize / 2
+            }
+            ]}>
+            {showBreakPoints && 
+              Array(this.props.max + 1).fill(null).map(() => 
+                <View style={{
+                  width: breakPointSize,
+                  height: breakPointSize,
+                  borderRadius: breakPointSize / 2,
+                  borderWidth: breakPointBorderWidth,
+                  borderColor: breakPointColor,
+                  backgroundColor: 'white'
+                }}/>
+              )}
+          </View>
           <View
             style={[
               styles.markerContainer,
@@ -477,18 +496,6 @@ export default class MultiSlider extends React.Component {
               positionOne > sliderLength / 2 && styles.topMarkerContainer,
             ]}
           >
-            <View style={[styles.breakPointsContainer, { width: breakPointContainerWidth }]}>
-              {showBreakPoints && 
-                Array(this.props.max * 2 + 1).fill(null).map(() => 
-                  <View style={{
-                    width: breakPointSize,
-                    height: breakPointSize,
-                    borderRadius: breakPointSize / 2,
-                    borderWidth: breakPointBorderWidth,
-                    borderColor: breakPointColor,
-                  }}/>
-                )}
-            </View>
             <View
               style={[styles.touch, touchStyle]}
               ref={component => (this._markerOne = component)}
@@ -561,8 +568,6 @@ export default class MultiSlider extends React.Component {
         </View>
       </React.Fragment>
     );
-
-    console.log()
 
     return (
       <View>

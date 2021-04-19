@@ -8,6 +8,7 @@ import {
   Dimensions,
   I18nManager,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 
 import DefaultMarker from './DefaultMarker';
@@ -386,7 +387,9 @@ export default class MultiSlider extends React.Component {
       breakPointSize,
       breakPointColor,
       showBreakPoints,
-      breakPointBorderWidth
+      breakPointBorderWidth,
+      onValuesChange,
+      values,
     } = this.props;
     const twoMarkers = this.props.values.length == 2; // when allowOverlap, positionTwo could be 0, identified as string '0' and throwing 'RawText 0 needs to be wrapped in <Text>' error
 
@@ -468,26 +471,7 @@ export default class MultiSlider extends React.Component {
               ]}
             />
           )}
-          <View style={[
-            styles.breakPointsContainer, 
-            { 
-              width: sliderLength + breakPointSize, 
-              top: - breakPointSize / 2, 
-              left: - breakPointSize / 2
-            }
-            ]}>
-            {showBreakPoints && 
-              Array(this.props.max + 1).fill(null).map(() => 
-                <View style={{
-                  width: breakPointSize,
-                  height: breakPointSize,
-                  borderRadius: breakPointSize / 2,
-                  borderWidth: breakPointBorderWidth,
-                  borderColor: breakPointColor,
-                  backgroundColor: 'white'
-                }}/>
-              )}
-          </View>
+ 
           <View
             style={[
               styles.markerContainer,
@@ -496,6 +480,23 @@ export default class MultiSlider extends React.Component {
               positionOne > sliderLength / 2 && styles.topMarkerContainer,
             ]}
           >
+            <View style={[styles.breakPointsContainer, { width: breakPointContainerWidth }]}>
+              {showBreakPoints && 
+                Array(this.props.max * 2 + 1).fill(null).map((_, idx) => 
+                  <TouchableOpacity 
+                    hitSlop={{top: 15, right: 15, bottom: 15, left: 15}}
+                    activeOpacity={1}
+                    style={{
+                      width: breakPointSize,
+                      height: breakPointSize,
+                      borderRadius: breakPointSize / 2,
+                      borderWidth: breakPointBorderWidth,
+                      borderColor: breakPointColor,
+                    }}
+                    onPress={() => onValuesChange([idx - this.props.max + values[0]]) }
+                  />
+                )}
+            </View>
             <View
               style={[styles.touch, touchStyle]}
               ref={component => (this._markerOne = component)}
@@ -568,6 +569,8 @@ export default class MultiSlider extends React.Component {
         </View>
       </React.Fragment>
     );
+
+    console.log()
 
     return (
       <View>

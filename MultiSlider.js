@@ -10,6 +10,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
+// import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import DefaultMarker from './DefaultMarker';
 import DefaultLabel from './DefaultLabel';
@@ -471,7 +472,27 @@ export default class MultiSlider extends React.Component {
               ]}
             />
           )}
- 
+          <View style={[styles.breakPointsContainer, 
+            { width: sliderLength + breakPointSize, left: -breakPointSize / 2 }
+          ]}>
+            {showBreakPoints && 
+              Array(this.props.max + 1).fill(null).map((_, idx) => 
+                <TouchableOpacity 
+                  hitSlop={{top: 20, right: 20, bottom: 20, left: 20}}
+                  activeOpacity={1}
+                  style={{
+                    width: breakPointSize,
+                    height: breakPointSize,
+                    borderRadius: breakPointSize / 2,
+                    borderWidth: breakPointBorderWidth,
+                    borderColor: breakPointColor,
+                    bottom: breakPointSize / 2 - 1
+
+                  }}
+                  onPress={() => onValuesChange([idx]) }
+                />
+              )}
+          </View>
           <View
             style={[
               styles.markerContainer,
@@ -480,23 +501,6 @@ export default class MultiSlider extends React.Component {
               positionOne > sliderLength / 2 && styles.topMarkerContainer,
             ]}
           >
-            <View style={[styles.breakPointsContainer, { width: breakPointContainerWidth }]}>
-              {showBreakPoints && 
-                Array(this.props.max * 2 + 1).fill(null).map((_, idx) => 
-                  <TouchableOpacity 
-                    hitSlop={{top: 15, right: 15, bottom: 15, left: 15}}
-                    activeOpacity={1}
-                    style={{
-                      width: breakPointSize,
-                      height: breakPointSize,
-                      borderRadius: breakPointSize / 2,
-                      borderWidth: breakPointBorderWidth,
-                      borderColor: breakPointColor,
-                    }}
-                    onPress={() => onValuesChange([idx - this.props.max + values[0]]) }
-                  />
-                )}
-            </View>
             <View
               style={[styles.touch, touchStyle]}
               ref={component => (this._markerOne = component)}
@@ -652,6 +656,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 2,
   },
   topMarkerContainer: {
     zIndex: 1,
